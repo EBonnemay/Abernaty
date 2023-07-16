@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/abernaty-client/abernaty-client.iml" filepath="$PROJECT_DIR$/abernaty-client/abernaty-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ms-patients/ms-patients.iml" filepath="$PROJECT_DIR$/ms-patients/ms-patients.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ms-practitioners/ms-practitioners.iml" filepath="$PROJECT_DIR$/ms-practitioners/ms-practitioners.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ms-risk/ms-risk.iml" filepath="$PROJECT_DIR$/ms-risk/ms-risk.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,105 @@
+version: "3.8"
+
+services:
+  mysqldb:
+    image: mysql:8
+    container_name: mysqldb
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - mysqldb:/var/lib/mysql
+    networks:
+      - abernaty-network
+  mongodb:
+    image: mongo:5
+    container_name: mongodb
+    ports:
+      - $MONGODB_LOCAL_PORT:$MONGODB_DOCKER_PORT
+    volumes:
+      - mongodb:/data/db
+    networks:
+      - abernaty-network
+  client:
+    depends_on:
+      - ms-risk
+      - ms-patients
+      - ms-practitioners
+    build: ./abernaty-client
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_CLIENT_LOCAL_PORT:$SPRING_CLIENT_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "app.services.risk.url" : "http://ms-risk:$SPRING_MS_RISK_DOCKER_PORT",
+        "app.services.patients.url" : "http://ms-patients:$SPRING_MS_PATIENTS_DOCKER_PORT",
+        "app.services.practitioners.url" : "http://ms-practitioners:$SPRING_MS_PRACTITIONERS_DOCKER_PORT"
+      }'
+    stdin_open: true
+    tty: true
+    networks:
+      - abernaty-network
+  ms-risk:
+    container_name: ms-risk
+    build: ./ms-risk
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_MS_RISK_LOCAL_PORT:$SPRING_MS_RISK_DOCKER_PORT
+    stdin_open: true
+    tty: true
+    networks:
+      - abernaty-network
+  ms-patients:
+    container_name: ms-patients
+    depends_on:
+      - mysqldb
+    build: ./ms-patients
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_MS_PATIENTS_LOCAL_PORT:$SPRING_MS_PATIENTS_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url" : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?allowPublicKeyRetrieval=true&useSSL=false",
+        "spring.datasource.username" : "$MYSQLDB_USER",
+        "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQLDialect",
+        "spring.jpa.hibernate.ddl-auto" : "update"
+      }'
+    stdin_open: true
+    tty: true
+    networks:
+      - abernaty-network
+  ms-practitioners:
+    container_name: ms-practitioners
+    depends_on:
+      - mongodb
+    build: ./ms-practitioners
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_MS_PRACTITIONERS_LOCAL_PORT:$SPRING_MS_PRACTITIONERS_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.data.mongodb.host" : "mongodb",
+        "spring.data.mongodb.port" : "$MONGODB_DOCKER_PORT",
+        "spring.data.mongodb.database": "$MONGODB_DATABASE"
+      }'
+    stdin_open: true
+    tty: true
+    networks:
+      - abernaty-network
+
+volumes:
+  mongodb:
+  mysqldb:
+
+networks:
+  abernaty-network:
+    driver: bridge

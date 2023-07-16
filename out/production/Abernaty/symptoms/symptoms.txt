@@ -1,0 +1,23 @@
+Hémoglobine A1C
+Microalbumine
+Taille
+Poids
+Fumeur
+Anormal
+Cholestérol
+Vertige
+Rechute
+Réaction
+Anticorps
+Hemoglobin A1C
+Microalbumin
+Height
+Weight
+Smoker
+Abnormal
+Cholesterol
+Dizziness
+Relapse
+Reaction
+Antibodies
+
