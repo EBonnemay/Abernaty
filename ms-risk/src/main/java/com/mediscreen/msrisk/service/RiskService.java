@@ -25,11 +25,9 @@ public class RiskService {
         String symptomsContentMixedCases = new String(bytes, StandardCharsets.UTF_8);
         //String symptomsContent = symptomsContentMixedCases.toLowerCase();
         listOfTriggers =  Arrays.asList((symptomsContentMixedCases.split("\\R")));
-        System.out.println("arrays as list is "+ listOfTriggers);
         for(String trigger  : listOfTriggers){
             trigger = processString(trigger);
             correctedListOfTriggers.add(trigger);
-            System.out.println("here is element of listOfTrigger "+trigger);
         }
 
     }
@@ -37,34 +35,23 @@ public class RiskService {
         List<String>result = new ArrayList<>();
         for(String trigger : listOfTriggers){
             String newTrigger = processString(trigger);
-            System.out.println("new spelling for symptom "+newTrigger);
             result.add(newTrigger);
         }
-    System.out.println(result);
     return result;
     }
     public int getAge(LocalDate localDateOfBirth){
-        //System.out.println("dateString is" + dateString);
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        //LocalDate localDateOfBirth = LocalDate.parse(dateString, formatter);
-        System.out.println("localDate of birth is "+ localDateOfBirth);
         LocalDate today = LocalDate.now();
         return Period.between(localDateOfBirth, today).getYears();
     }
     public List getListOfRiskFactorsForOnePatient(List<String>listOfNotes){
 
-        System.out.println("list of notes is this : "+listOfNotes);
-        //create new list called result
         List<String> listOfRiskFactorsForOnePatient = new ArrayList<String>() ;
         listOfNotes.forEach(note -> {
 
             //
             String processedNote = processString(note);
 
-            System.out.println("listOfTriggers before looping is "+ correctedListOfTriggers);
-            System.out.println("processed Note is " + processedNote);
             for (String trigger:correctedListOfTriggers) {
-                System.out.println("trigger in loop is "+trigger);
                 if (processedNote.contains(trigger)) {
                     if(!listOfRiskFactorsForOnePatient.contains(trigger)) {
                         listOfRiskFactorsForOnePatient.add(trigger);
@@ -72,7 +59,6 @@ public class RiskService {
                 }
             }
         });
-        System.out.println("list of risk factors for this patient is "+listOfRiskFactorsForOnePatient);
         return listOfRiskFactorsForOnePatient;
     }
     public String processComposedWordTrigger(String partOne, String partTwo, List words){
@@ -91,8 +77,6 @@ public class RiskService {
 
     public String calculateRisk(String sex, int age, List listOfRiskFactorsForOnePatient){
         String result = "";
-        System.out.println("parameters are sex = "+ sex + " age is "+age+" listofriskfactorsis "+ listOfRiskFactorsForOnePatient);
-
         if(listOfRiskFactorsForOnePatient.size()<2) {
              result =  "None";
         }
@@ -106,7 +90,6 @@ public class RiskService {
             result ="None";
         }
         if(sex.equals("M")&&age<30&&listOfRiskFactorsForOnePatient.size()>2&&listOfRiskFactorsForOnePatient.size()<5){
-            System.out.println("in danger matching condition");
              result = "In danger";
         }
         if(sex.equals("F")&&age<30&&listOfRiskFactorsForOnePatient.size()>=4&&listOfRiskFactorsForOnePatient.size()<7) {
@@ -124,20 +107,11 @@ public class RiskService {
         if(age>=30&&listOfRiskFactorsForOnePatient.size()>=8) {
              result = "Early onset";
         }
-        System.out.println("level of risk is "+result);
         return result;
     }
     public String processString(String string){
-        //System.out.println("mot avant stem "+ word);
-        //passe en minuscules
-        //enleve les accents
-        string = removeAccentsAndUpperCases(string);
-        //si le mot a un point, point virgule, enlève-le
+       string = removeAccentsAndUpperCases(string);
         string = removePhraseMarks(string);
-        //word = stemWord(word);
-        //System.out.println("mot après stem "+ word);
-        //passe le mot au stemmer
-        System.out.println(string);
         return string;
     }
     public String removePhraseMarks(String word){
@@ -151,13 +125,6 @@ public class RiskService {
                 .replaceAll("\\p{InCombiningDiacriticalMarks}", "");
         return cleanedWord;
     }
-   /* public String stemWord(String word){
-        Analyzer analyzer = new FrenchAnalyzer();
-        String stemmedWord = analyzer.normalize("dummy", word).utf8ToString();
-
-        return stemmedWord;
-
-    }*/
 
 
 }

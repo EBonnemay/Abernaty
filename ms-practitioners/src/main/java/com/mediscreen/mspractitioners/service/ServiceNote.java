@@ -28,9 +28,7 @@ public class ServiceNote {
         return repositoryNote.findAll();
     }
     public Note findNoteById(String id){
-        System.out.println("id of this note in service is "+ id);
         Optional<Note>optNote = repositoryNote.findById(id);
-        System.out.println("opt note in service findNoteById is "+ optNote);
         return optNote.get();
     }
     public Boolean existsById(String id){

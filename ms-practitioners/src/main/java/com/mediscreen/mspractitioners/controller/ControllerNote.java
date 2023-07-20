@@ -37,7 +37,6 @@ public class ControllerNote {
     /**api request : retrieve one note by its id*/
     @GetMapping("/{id}")
     public ResponseEntity<Note> findNoteById(@PathVariable("id")String id){
-        System.out.println("id is "+ id );
         try {
             Note note = serviceNote.findNoteById(id);
             return ResponseEntity.ok(note);
@@ -50,14 +49,14 @@ public class ControllerNote {
     @GetMapping("/all/{patId}")
     public ResponseEntity<List<Note>>retrieveOnePatientsNotes(@PathVariable ("patId")String patId){
         List<Note> list = serviceNote.retrieveOnePatientsNotes(patId);
-        if(list.size()==0){
-            return ResponseEntity.notFound().build();
-        }else{
+        //if(list.size()==0){
+            //return ResponseEntity.notFound().build();
+        //}else{
             return ResponseEntity.ok(list);
         }
 
         //return new ResponseEntity<>(list, HttpStatus.OK);
-    }
+
     /**api request : add note for one patient -- tested postman*/
     @PostMapping("/add/{patId}")
     public ResponseEntity<Note>addPatientNote(@PathVariable ("patId") String patId, @RequestParam ("contentNote") String contentNote){

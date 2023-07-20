@@ -75,10 +75,8 @@ public class PatientsService {
             Optional<Patient> opt = patientsRepository.findByFullName(patient.getFamily(), patient.getGiven());
             try{
                 opt.get();//si ce patient existe déjà
-                System.out.println("ce patient existe déjà");
                 throw new Exception();
             }catch(NoSuchElementException noSuchElementException){
-                System.out.println("before saving patient");
                 return patientsRepository.save(patient);
             }
 
@@ -91,11 +89,6 @@ public class PatientsService {
     }
     public void deletePatient(String i){
         Integer idInteger = Integer.parseInt(i);
-        System.out.println("idInteger is "+ idInteger);
-        //Iterable<Patient> listOfPatients
-        //Optional<Patient>optPatientToDelete = patientsRepository.findByFullName(family, given);
-        //Patient patientToDelete = optPatientToDelete.get();
-        //int i = patientToDelete.getPatient_id();
         patientsRepository.deleteById(idInteger);
     }
 

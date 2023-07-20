@@ -130,7 +130,6 @@ public class PatientsController {
      */
     @GetMapping("/patient/delete/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable("id") String id) {
-        System.out.println("in PatientController, patient's id to delete : " + id);
         if (!patientsService.existsById(Integer.parseInt(id))) {
             return ResponseEntity.notFound().build();
         } else {

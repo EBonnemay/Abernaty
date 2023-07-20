@@ -121,8 +121,6 @@ public class RiskServiceTest {
         actualList = riskService.getListOfRiskFactorsForOnePatient(testInDangerListOfNotes);
         assertTrue(listOfRiskFactorsForInDanger.size()==actualList.size()&&listOfRiskFactorsForInDanger.containsAll(actualList)&&actualList.containsAll(listOfRiskFactorsForInDanger));
         actualList = riskService.getListOfRiskFactorsForOnePatient(testEarlyOnsetListOfNotes);
-        System.out.println("actualList is "+actualList);
-        System.out.println("listOfRiskFactorsForEarlyOnset is "+ listOfRiskFactorsForEarlyOnset);
         assertTrue(listOfRiskFactorsForEarlyOnset.size()== actualList.size()&&listOfRiskFactorsForEarlyOnset.containsAll(actualList)&&actualList.containsAll(listOfRiskFactorsForEarlyOnset));
 
     }
