@@ -44,7 +44,33 @@
 
 </head>
 <body>
-<header></header>
+<header>
+    <div class="text-center border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 bg-light d-flex align-items-center justify-content-start"  >
+                    <ul class="navbar-nav flex-row" >
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <a class="nav-link"  th:href="@{/note/all/{patId}(patId=${patient.patient_id})}">  Notes </a>
+                        </li>
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <p class="nav-link" href="#">  &nbsp;  &nbsp; / &nbsp;  &nbsp;  </p>
+                        </li>
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <a class="nav-link" href="/patient/all">Patients</a>
+                        </li>
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <p class="nav-link" href="#">  &nbsp;  &nbsp; / &nbsp;  &nbsp;  </p>
+                        </li>
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 <main>
 
 
@@ -55,7 +81,7 @@
 
       <div class="report-div">
         <form th:action="@{/note/add/{patId}(patId=${patient.patient_id})}"  method="post">
-            <textarea class= centered-textarea name = "contentNote">new report ...</textarea>
+            <textarea class= centered-textarea name = "contentNote"></textarea>
             <div th:if="${error}">
                 <p class="errors">error in adding note</p>
             </div>

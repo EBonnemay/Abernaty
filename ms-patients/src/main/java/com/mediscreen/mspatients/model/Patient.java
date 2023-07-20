@@ -2,6 +2,7 @@ package com.mediscreen.mspatients.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,10 +29,12 @@ public class Patient {
     @NotBlank(message = "Given is mandatory")
     @Column(name = "given")
     private String given;
+    @NotNull(message = "Date of Birth is mandatory")
     @Column(name = "date_of_birth")
     private LocalDate date_of_birth;
 
-   @Column(name = "sex")
+    @NotBlank(message = "Sex is mandatory")
+    @Column(name = "sex")
     private String sex;
 
    @Column(name = "address")
@@ -40,9 +43,11 @@ public class Patient {
    @Column(name = "phone")
     private String phone;
 
-   public Patient(String family, String given){
+   public Patient(String family, String given,LocalDate dob, String sex ){
        this.family = family;
        this.given = given;
+       this.date_of_birth = dob;
+       this.sex = sex;
    }
    public Patient(String family, String given, LocalDate dob, String sex, String address, String phone){
        this.family = family;

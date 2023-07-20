@@ -48,10 +48,7 @@ public class RiskService {
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         //LocalDate localDateOfBirth = LocalDate.parse(dateString, formatter);
         System.out.println("localDate of birth is "+ localDateOfBirth);
-
-
         LocalDate today = LocalDate.now();
-
         return Period.between(localDateOfBirth, today).getYears();
     }
     public List getListOfRiskFactorsForOnePatient(List<String>listOfNotes){
@@ -109,7 +106,7 @@ public class RiskService {
             result ="None";
         }
         if(sex.equals("M")&&age<30&&listOfRiskFactorsForOnePatient.size()>2&&listOfRiskFactorsForOnePatient.size()<5){
-            System.out.println("indanger matching condition");
+            System.out.println("in danger matching condition");
              result = "In danger";
         }
         if(sex.equals("F")&&age<30&&listOfRiskFactorsForOnePatient.size()>=4&&listOfRiskFactorsForOnePatient.size()<7) {

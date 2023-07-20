@@ -18,7 +18,33 @@
     </style>
 </head>
 <body>
-<header></header>
+<header>
+    <div class="text-center border-bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 bg-light d-flex align-items-center justify-content-start"  >
+                    <ul class="navbar-nav flex-row" >
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <p class="nav-link"  href="#">  Notes </p>
+                        </li>
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <p class="nav-link" href="#">  &nbsp;  &nbsp; / &nbsp;  &nbsp;  </p>
+                        </li>
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <a class="nav-link" href="/patient/all">Patients</a>
+                        </li>
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <p class="nav-link" href="#">  &nbsp;  &nbsp; / &nbsp;  &nbsp;  </p>
+                        </li>
+                        <li class="nav-item me-2 me-lg-0 mr-4 mt-2">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 <main>
     <div class="container d-flex justify-content-center bg-light border border-dark py-4">
         <div>
@@ -38,7 +64,10 @@
                 </div>
 
                 <div class="row py-2">
-                    <input type="text"  id="sex" name="sex"placeholder="sex" style="width: 200px; height: 40px; margin: 2px;" /> <br />
+                    <select type="text"  id="sex" name="sex" required placeholder="sex" style="width: 200px; height: 40px; margin: 2px;" /> <br />
+                    <option value="M">M</option>
+                    <option value="F">F</option>
+                    </select>
                 </div>
                 <div class="row py-2">
                     <input type="text"  id="address" name="address"placeholder="address" style="width: 200px; height: 40px; margin: 2px;" /> <br />

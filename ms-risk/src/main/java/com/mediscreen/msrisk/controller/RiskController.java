@@ -17,12 +17,11 @@ public class RiskController {
     @PostMapping("/risk/calculate")//doit correspondre
     public ResponseEntity<RiskFactorDto> calculateRiskFactors(@RequestBody RiskFactorDto riskFactorDto){
         try {
-            /**RiskFactorDTO has date of birth, sex, list of messages*/
+            /**RiskFactorDTO has date of birth, sex, list of messages + numberOfTriggers and levelOfRisk that are fulfilled later*/
             LocalDate dob = riskFactorDto.getDob();
             int age = riskService.getAge(dob);
 
             List listOfRiskFactorsForOnePatient = riskService.getListOfRiskFactorsForOnePatient(riskFactorDto.getListOfOnePatientsMessages());
-            /**RiskFactorDTO has also numberOfTriggers and levelOfRisk*/
             int numberOfRiskFactors = listOfRiskFactorsForOnePatient.size();
             riskFactorDto.setNumberOfTriggers(numberOfRiskFactors);//displayed on notesPage
 

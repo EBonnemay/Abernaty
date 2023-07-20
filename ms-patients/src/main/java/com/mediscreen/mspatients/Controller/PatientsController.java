@@ -107,9 +107,10 @@ public class PatientsController {
      */
     @PostMapping("/patient/add")
     public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {
-        Patient newPatient = new Patient();
+        //Patient newPatient = new Patient();
         try {
-            newPatient = patientsService.addPatient(patient);
+            Patient newPatient = patientsService.addPatient(patient);
+
             logger.info("person added successfully");
             URI location = ServletUriComponentsBuilder.fromCurrentRequestUri().replacePath("/patient/{id}").buildAndExpand(patient.getPatient_id()).toUri();
             logger.info("uri location is " + location.toString());
@@ -117,7 +118,7 @@ public class PatientsController {
             return ResponseEntity.created(location).body(newPatient);
             //return ResponseEntity.
         } catch (Exception e) {
-            //logger.error("item not found");
+            logger.error("no patient added");
             //throw new RuntimeException("not possible to add this patient");
             return ResponseEntity.badRequest().build();
         }
@@ -130,7 +131,7 @@ public class PatientsController {
     @GetMapping("/patient/delete/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable("id") String id) {
         System.out.println("in PatientController, patient's id to delete : " + id);
-        if (!patientsService.existsById(Integer.valueOf(id))) {
+        if (!patientsService.existsById(Integer.parseInt(id))) {
             return ResponseEntity.notFound().build();
         } else {
             patientsService.deletePatient(id);

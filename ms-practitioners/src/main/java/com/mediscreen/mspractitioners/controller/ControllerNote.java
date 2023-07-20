@@ -33,7 +33,6 @@ public class ControllerNote {
         } else{
             return ResponseEntity.noContent().build();
         }
-        //return new ResponseEntity<>(allNotes, HttpStatus.OK);
     }
     /**api request : retrieve one note by its id*/
     @GetMapping("/{id}")
@@ -50,11 +49,11 @@ public class ControllerNote {
     /**api request : all notes for one patient__tested postman*/
     @GetMapping("/all/{patId}")
     public ResponseEntity<List<Note>>retrieveOnePatientsNotes(@PathVariable ("patId")String patId){
-        try{
-            List<Note> list = serviceNote.retrieveOnePatientsNotes(patId);
-            return ResponseEntity.ok(list);
-        }catch (Exception e){
+        List<Note> list = serviceNote.retrieveOnePatientsNotes(patId);
+        if(list.size()==0){
             return ResponseEntity.notFound().build();
+        }else{
+            return ResponseEntity.ok(list);
         }
 
         //return new ResponseEntity<>(list, HttpStatus.OK);

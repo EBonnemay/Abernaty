@@ -98,29 +98,28 @@ public class ClientController {
    @PostMapping("/patient/update/{id}")
     public String updatePatient(@PathVariable("id") String id, @Valid @ModelAttribute ("patient") PatientBean patient, BindingResult bindingResult){
         System.out.println("this is family "+ patient.getFamily());
-        //System.out.println("this is date :"+ dateOfBirth);
-        //j'ai une family et une date  format 1999-12-19
-
         try {
             patientsProxy.updatePatient(id, patient);
         }
         catch(Exception e){
-                //model.addAttribute("error");
-                //return String.format("redirect:/patient/update/%s",id);
             return String.format("redirect:/patient/update/%s?error=true", id);
-
         }
         System.out.println("in client controller post : date of birth = "+ patient.getDate_of_birth());
-        //System.out.println("in client controller post : date instance of Date?" + (patient.getDate_of_birth() instanceof Date));
-        return String.format("/patient/all");
+        return "redirect:/patient/all";
     }
     /**add a patient and return Patients*/
     @PostMapping("/patient/add")
     public String addPatient(@Valid @ModelAttribute ("patient")PatientBean patient, BindingResult bindingResult){
         System.out.println("this is family "+ patient.getFamily());
+        System.out.println("this is family "+ patient.getGiven());
+        System.out.println("this is family "+ patient.getDate_of_birth());
+        System.out.println("this is family "+ patient.getSex());
+        System.out.println("this is family "+ patient.getAddress());
+        System.out.println("this is family "+ patient.getPhone());
 
         if(bindingResult.hasErrors()){
-            return "error-page";
+            System.out.println("error in bindingResult!!!!");
+            return String.format("redirect:/patient/add?error=true");
         }
         try{
             patientsProxy.addPatient(patient);
@@ -133,14 +132,14 @@ public class ClientController {
         System.out.println("in client controller post : date of birth = "+ patient.getDate_of_birth());
        // System.out.println("in client controller post : date instance of Date?" + (patient.getDate_of_birth() instanceof Date));
 
-        return "redirect:/";
+        return "redirect:/patient/all";
     }
     /**delete a patient and return Patients*/
    @GetMapping("/patient/delete/{id}")
     public String deletePatient(@PathVariable ("id")String id){
         System.out.println("patient to delete's id is "+ id);
         patientsProxy.deletePatient(id);
-        return "redirect:/";
+        return "redirect:/patient/all";
     }
 
     /**display the list of notes on one patient on NotesPage page__*/
@@ -196,23 +195,6 @@ public class ClientController {
         return "AddNote";
     }
 
-    /**display 'update note' form on UpdateNote page__ calling patient and pratitioners' proxy__*/
-   @GetMapping("/note/update/{id}")
-    public String displayUpdateNoteForm(@RequestParam (name = "error", required = false)String error, @PathVariable("id")String id, Model model){
-       System.out.println("just entered client controller");
-        NoteBean note = practitionersProxy.findNoteById(id);
-        System.out.println("id in clientcontroller is "+ id);
-        String patId = note.getPatId();
-        System.out.println("patId in client controller is "+ patId);
-        int intPatId = Integer.parseInt(patId);
-        PatientBean patient = patientsProxy.getPatientById(intPatId);
-       if (error != null) {
-           model.addAttribute("error", true);
-       }
-        model.addAttribute("note", note);
-        model.addAttribute("patient", patient);
-        return "UpdateNote";
-    }
 
     /**add a note and return notesPage with patient's id as param__*/
     @PostMapping("/note/add/{patId}")
@@ -233,6 +215,6 @@ public class ClientController {
        String patId = note.getPatId();
        practitionersProxy.deleteNote(id);
        System.out.println("voilà patId "+ patId);
-        return String.format("redirect:/note/all/%s",patId);
+       return String.format("redirect:/note/all/%s",patId);
     }
 }

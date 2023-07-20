@@ -37,13 +37,9 @@ public class ServiceNoteTest {
     @Test
     public void addNoteTest(){
         Note note = new Note("1", "new note from practitionner");
-
-       // Mockito.doNothing().when(repositoryNote).save(any(Note.class));
         when(repositoryNote.save(note)).thenReturn(note);
         serviceNote.addNote(note.getPatId(), note.getContentNote());
-//doNothing().when(myList).add(isA(Integer.class),
         verify(repositoryNote, times(1)).save(any(Note.class));
-
     }
     @Test
     public void retrieveOnePatientsNotesTest(){
@@ -71,14 +67,19 @@ public class ServiceNoteTest {
         verify(repositoryNote, times(1)).findById("1");
     }
     @Test
+    public void existsByIdTest(){
+        when(repositoryNote.existsById("1")).thenReturn(true);
+        serviceNote.existsById("1");
+        verify(repositoryNote, times(1)).existsById("1");
+    }
+
+    @Test
     public void deletePatientNoteTest(){
 
         Note note = new Note("1", "new note from practitionner");
         note.setId("2");
         Mockito.doNothing().when(repositoryNote).deleteById("2");
-        //when(repositoryNote.delete(note)).thenReturn(note);
         serviceNote.deletePatientNote("2");
-//doNothing().when(myList).add(isA(Integer.class),
         verify(repositoryNote, times(1)).deleteById("2");
 
 

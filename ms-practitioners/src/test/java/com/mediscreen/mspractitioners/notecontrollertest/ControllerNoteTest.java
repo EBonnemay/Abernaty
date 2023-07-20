@@ -46,8 +46,16 @@ public class ControllerNoteTest {
     public void findNoteByIdTest(){
         Note note1 = new Note("1", "new note");
         when(serviceNote.findNoteById("1")).thenReturn(note1);
-        //Note note2 = controllerNote.findNoteById("1");
+        ResponseEntity<Note> response = controllerNote.findNoteById("1");
         verify(serviceNote, times(1)).findNoteById("1");
+        assertEquals(note1,response.getBody());
+
+    }
+    @Test
+    public void findNoteByNonExistingId(){
+        when(serviceNote.findNoteById("1")).thenThrow(NoSuchElementException.class);
+        controllerNote.findNoteById("1");
+        assertEquals(ResponseEntity.notFound().build(),controllerNote.findNoteById("1") );
 
     }
 
@@ -57,36 +65,47 @@ public class ControllerNoteTest {
         List<Note> listOfNotes = new ArrayList<>();
         when(serviceNote.retrieveOnePatientsNotes("1")).thenReturn(listOfNotes);
         ResponseEntity response = controllerNote.retrieveOnePatientsNotes("1");
-
-        System.out.println(response.getStatusCode());
-        System.out.println(response.getBody());
         verify(serviceNote, times(1)).retrieveOnePatientsNotes("1");
-        //HttpStatusCode newStatus = new
         }
-        //assertEquals("200 OK", response.getStatusCode().getM);
-
+    @Test
+    public void retrieveOnePatientsNotesWhenNoNotesTest(){
+        List<Note> list = new ArrayList<>();
+        when(serviceNote.retrieveOnePatientsNotes("1")).thenReturn(list);
+        controllerNote.retrieveOnePatientsNotes("1");
+        assertEquals(ResponseEntity.notFound().build(), controllerNote.retrieveOnePatientsNotes("1"));
+    }
 
 
     @Test
     public void addPatientNoteTest() {
         Note note = new Note("1", "new note");
-
-        // Mockito.doNothing().when(repositoryNote).save(any(Note.class));
         when(serviceNote.addNote("1", "new note")).thenReturn(note);
         ResponseEntity response = controllerNote.addPatientNote(note.getPatId(), note.getContentNote());
-//doNothing().when(myList).add(isA(Integer.class),
         verify(serviceNote, times(1)).addNote("1", "new note");
+
+    }
+    @Test
+    public void addPatientVoidNote(){
+        Note note = new Note("1", "");
+
+        when(serviceNote.addNote("1", "")).thenReturn(note);
+        ResponseEntity response = controllerNote.addPatientNote(note.getPatId(), note.getContentNote());
+        assertEquals(ResponseEntity.badRequest().build(), controllerNote.addPatientNote(note.getPatId(), note.getContentNote()));
     }
     @Test
     public void deletePatientNoteTest() {
         Note note = new Note("1", "new note");
-
-        // Mockito.doNothing().when(repositoryNote).save(any(Note.class));
-        Mockito.doNothing().when(serviceNote).deletePatientNote("1");
-        ResponseEntity response = controllerNote.deletePatientNote("1");
-//doNothing().when(myList).add(isA(Integer.class),
-        verify(serviceNote, times(1)).deletePatientNote("1");
-
+        note.setId("3");
+        when(!serviceNote.existsById("3")).thenReturn(true);
+        Mockito.doNothing().when(serviceNote).deletePatientNote("3");
+        ResponseEntity response = controllerNote.deletePatientNote("3");
+        verify(serviceNote, times(1)).deletePatientNote("3");
+    }
+    @Test
+    public void deleteNonExistingNoteTest(){
+        when(!serviceNote.existsById("1")).thenReturn(false);
+        controllerNote.deletePatientNote("1");
+        assertEquals(ResponseEntity.notFound().build(), controllerNote.deletePatientNote("id"));
     }
 
 

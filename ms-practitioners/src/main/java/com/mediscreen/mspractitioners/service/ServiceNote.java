@@ -18,8 +18,9 @@ public class ServiceNote {
         repositoryNote.save(note);
         return note;
     }
-    public List<Note> retrieveOnePatientsNotes(String patId){
-        return repositoryNote.findByPatId(patId);
+    public List<Note> retrieveOnePatientsNotes(String patId)  {
+        List<Note> notesForThisPatient =  repositoryNote.findByPatId(patId);
+        return notesForThisPatient;
 
 
     }
@@ -40,12 +41,5 @@ public class ServiceNote {
         //Note note = optNote.get();
         repositoryNote.deleteById(id);
     }
-    /*public Note updateNote(String id, String updatedContentNote){
-        Optional<Note> optNote = repositoryNote.findById(id);
-        Note note = optNote.get();
-        System.out.println(note.getDate());
-        note.setContentNote(updatedContentNote);
-        repositoryNote.save(note);
-        return note;
-    }*/
+
 }

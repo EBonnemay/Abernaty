@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -63,5 +65,8 @@ public class RiskControllerTest {
         verify(riskService, times(1)).getListOfRiskFactorsForOnePatient(testNoneListOfNotes);
         verify(riskService, times(1)).calculateRisk("F", 51, listOfRiskFactorsForTestPatient);
 
+        assertEquals(ResponseEntity.ok(riskFactorDto),riskController.calculateRiskFactors(riskFactorDto));
+
     }
+
 }

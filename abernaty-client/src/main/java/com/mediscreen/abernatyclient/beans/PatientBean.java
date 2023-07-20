@@ -26,7 +26,7 @@ public class PatientBean {
 
         private String phone;
 
-        public PatientBean(String family, String given){
+        public PatientBean(String family, String given, LocalDate dob, String sex){
             this.family = family;
             this.given = given;
         }

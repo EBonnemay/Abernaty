@@ -36,6 +36,13 @@ public class PatientServiceTest {
     }
 
     @Test
+    public void existsByIdTest(){
+        when(patientsRepository.existsById(1)).thenReturn(true);
+        patientsService.existsById(1);
+        verify(patientsRepository, times(1)).existsById(1);
+        assertEquals(true, patientsService.existsById(1));
+    }
+    @Test
     public void getPatientsTest() {
         Iterable<Patient> listOfPatients = new ArrayList<>();
         when(patientsRepository.findAll()).thenReturn(listOfPatients);
@@ -104,13 +111,13 @@ public class PatientServiceTest {
         return patientsRepository.findAll();
     }*/
     @Test
-    public void addPatientTest(){
+    public void addPatientTest() throws Exception {
         Patient patient = new Patient();
         patient.setPatient_id(1);
 
         // Mockito.doNothing().when(repositoryNote).save(any(Note.class));
         when(patientsRepository.save(any(Patient.class))).thenReturn(patient);
-        //patientsService.addPatient(patient);
+        patientsService.addPatient(patient);
 //doNothing().when(myList).add(isA(Integer.class),
         verify(patientsRepository, times(1)).save(patient);
 

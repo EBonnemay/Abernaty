@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -71,10 +72,19 @@ public class PatientsService {
     }*/
     public Patient addPatient(Patient patient) throws Exception {
 
-        if(patientsRepository.existsById(patient.getPatient_id())){
-            throw new Exception();
-        }
-        return patientsRepository.save(patient);
+            Optional<Patient> opt = patientsRepository.findByFullName(patient.getFamily(), patient.getGiven());
+            try{
+                opt.get();//si ce patient existe déjà
+                System.out.println("ce patient existe déjà");
+                throw new Exception();
+            }catch(NoSuchElementException noSuchElementException){
+                System.out.println("before saving patient");
+                return patientsRepository.save(patient);
+            }
+
+
+
+
 
 
 

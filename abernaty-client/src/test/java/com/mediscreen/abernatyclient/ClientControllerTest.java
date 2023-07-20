@@ -23,8 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -61,10 +60,24 @@ public class ClientControllerTest {
     public void displayUpdateFormTest(){
         PatientBean patient = new PatientBean();
         Model model = new ConcurrentModel();
+
         when(patientsProxy.getPatientById(1)).thenReturn(patient);
-        //clientController.displayUpdateForm("1", model);
+        clientController.displayUpdateForm(null, "1", model);
         verify(patientsProxy, times(1)).getPatientById(1);
         assertTrue(model.containsAttribute("patient"));
+        assertFalse(model.containsAttribute("error"));
+
+    }
+    @Test
+    public void displayUpdateFormIfErrorTest(){
+        PatientBean patient = new PatientBean();
+        Model model = new ConcurrentModel();
+        String error = "error";
+        when(patientsProxy.getPatientById(1)).thenReturn(patient);
+        clientController.displayUpdateForm("error", "1", model);
+        verify(patientsProxy, times(1)).getPatientById(1);
+        assertTrue(model.containsAttribute("patient"));
+        assertTrue(model.containsAttribute("error"));
 
     }
     @Test
@@ -76,7 +89,7 @@ public class ClientControllerTest {
         when(patientsProxy.updatePatient("1", patient)).thenReturn(patient);
         clientController.updatePatient("1", patient,  bindingResult);
         verify(patientsProxy, times(1)).updatePatient("1", patient);
-        assertEquals ("redirect:/", clientController.updatePatient("1", patient,  bindingResult));
+        assertEquals ("redirect:/patient/all", clientController.updatePatient("1", patient,  bindingResult));
 
     }
     @Test
@@ -88,7 +101,7 @@ public class ClientControllerTest {
         when(patientsProxy.addPatient(patient)).thenReturn(patient);
         clientController.addPatient(patient,  bindingResult);
         verify(patientsProxy, times(1)).addPatient(patient);
-        assertEquals ("redirect:/", clientController.addPatient(patient,  bindingResult));
+        assertEquals ("redirect:/patient/all", clientController.addPatient(patient,  bindingResult));
 
     }
     @Test
@@ -99,7 +112,7 @@ public class ClientControllerTest {
         Mockito.doNothing().when(patientsProxy).deletePatient("1");
         clientController.deletePatient("1");
         verify(patientsProxy, times(1)).deletePatient("1");
-        assertEquals ("redirect:/", clientController.deletePatient("1"));
+        assertEquals ("redirect:/patient/all", clientController.deletePatient("1"));
     }
 
     @Test
@@ -134,9 +147,10 @@ public class ClientControllerTest {
         verify(patientsProxy, times(1)).getPatientById(1);
         verify(riskProxy, times(1)).calculateRiskFactors(any(RiskFactorDtoBean.class));
 
+        assertTrue(model.containsAttribute("age"));
         assertTrue(model.containsAttribute("listOfNotes"));
         assertTrue(model.containsAttribute("patient"));
-        assertTrue(model.containsAttribute("risk"));
+        assertTrue(model.containsAttribute("riskFactorDtoBean1"));
 
     }
     @Test
@@ -144,23 +158,28 @@ public class ClientControllerTest {
         Model model = new ConcurrentModel();
         PatientBean patient = new PatientBean();
         when(patientsProxy.getPatientById(1)).thenReturn(patient);
-        //clientController.displayAddNoteForm("1", model);
+        clientController.displayAddNoteForm(null, "1", model);
         verify(patientsProxy, times(1)).getPatientById(1);
         assertTrue(model.containsAttribute("patient"));
+        assertFalse(model.containsAttribute("error"));
 
 
     }
     @Test
-    public void displayUpdateNoteFormTest(){
+    public void displayUpdateNoteFormWithErrorsTest(){
         Model model = new ConcurrentModel();
         NoteBean note = new NoteBean("1", "new note");
         PatientBean patient = new PatientBean();
         when(practitionersProxy.findNoteById("1")).thenReturn(note);
         when(patientsProxy.getPatientById(1)).thenReturn(patient);
-        //clientController.displayAddNoteForm("1", model);
+        clientController.displayAddNoteForm("error", "1", model);
 
+        assertTrue(model.containsAttribute("error"));
+        //assertTrue(model.containsAttribute("note")); POURQUOI??
+        assertTrue(model.containsAttribute("patient"));
 
     }
+
     @Test
     public void addNoteTest(){
         NoteBean note = new NoteBean("1", "new content note");
@@ -182,11 +201,24 @@ public class ClientControllerTest {
     }
 
 
+
     @Test
-    public void updateNoteTest(){
-        //clientController.updateNote()
+    public void displayPatientRequestFormWithErrorsTest(){
+        Model model = new ConcurrentModel();
+        clientController.displayPatientRequestForm("error", model);
+        assertTrue(model.containsAttribute("error"));
+        assertEquals("HomePage", clientController.displayPatientRequestForm("error", model));
+
+
+
     }
+    @Test
+    public void displayAddForm(){
+        Model model = new ConcurrentModel();
+        clientController.displayAddForm("error", model);
+        assertTrue(model.containsAttribute("error"));
+        assertEquals("AddPatient", clientController.displayAddForm("error", model));
 
-
+    }
 
 }

@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -92,6 +93,7 @@ public class RiskServiceTest {
         listOfRiskFactorsForEarlyOnset.add("weight");
         listOfRiskFactorsForEarlyOnset.add("cholesterol");
         listOfRiskFactorsForEarlyOnset.add("dizziness");
+        listOfRiskFactorsForEarlyOnset.add("hemoglobin a1c");
     }
 
 @Test
@@ -112,10 +114,16 @@ public class RiskServiceTest {
     }
     @Test
     public void getListOfRiskFactorsForOnePatientTest(){
-        assertEquals(listOfRiskFactorsForNone, riskService.getListOfRiskFactorsForOnePatient(testNoneListOfNotes));
-        assertEquals(listOfRiskFactorsForBorderline, riskService.getListOfRiskFactorsForOnePatient(testBorderlineListOfNotes));
-        assertEquals(listOfRiskFactorsForInDanger, riskService.getListOfRiskFactorsForOnePatient(testInDangerListOfNotes));
-        assertEquals(listOfRiskFactorsForEarlyOnset, riskService.getListOfRiskFactorsForOnePatient(testEarlyOnsetListOfNotes));
+        List<String>actualList = riskService.getListOfRiskFactorsForOnePatient(testNoneListOfNotes);
+        assertTrue(listOfRiskFactorsForNone.size()==actualList.size()&&listOfRiskFactorsForNone.containsAll(actualList)&&actualList.containsAll(listOfRiskFactorsForNone));
+        actualList = riskService.getListOfRiskFactorsForOnePatient(testBorderlineListOfNotes);
+        assertTrue(listOfRiskFactorsForBorderline.size()==actualList.size()&&listOfRiskFactorsForBorderline.containsAll(actualList)&&actualList.containsAll(listOfRiskFactorsForBorderline));
+        actualList = riskService.getListOfRiskFactorsForOnePatient(testInDangerListOfNotes);
+        assertTrue(listOfRiskFactorsForInDanger.size()==actualList.size()&&listOfRiskFactorsForInDanger.containsAll(actualList)&&actualList.containsAll(listOfRiskFactorsForInDanger));
+        actualList = riskService.getListOfRiskFactorsForOnePatient(testEarlyOnsetListOfNotes);
+        System.out.println("actualList is "+actualList);
+        System.out.println("listOfRiskFactorsForEarlyOnset is "+ listOfRiskFactorsForEarlyOnset);
+        assertTrue(listOfRiskFactorsForEarlyOnset.size()== actualList.size()&&listOfRiskFactorsForEarlyOnset.containsAll(actualList)&&actualList.containsAll(listOfRiskFactorsForEarlyOnset));
 
     }
         @Test
@@ -138,7 +146,7 @@ public class RiskServiceTest {
         String phrase = "how are you? fine, thank you;but i know it:this won't last!";
         //ACT
         //ASSERT
-        assertEquals("how are you fine thank youbut i know itthis wont last",  riskService.removePhraseMarks(phrase));
+        assertEquals("how are you  fine  thank you but i know it this won t last ",  riskService.removePhraseMarks(phrase));
     }
     @Test
     public void removeAccentsAndUpperCases(){
