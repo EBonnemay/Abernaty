@@ -19,6 +19,9 @@
 .title{
   margin-bottom: 5%;
 }
+.date-column {
+    width: 150px;
+  }
 
 
 
@@ -101,7 +104,7 @@
             <td colspan="3">No note on this patient</td>
           </tr>
           <tr th:each="note: ${listOfNotes}">
-            <td th:text="${note.date}"></td>
+            <td th:text="${note.date}"  class="date-column"></td>
             <td th:text="${note.contentNote}"></td>
             <td><form th:action="@{/note/delete/{id}(id=${note.id})}" method="get" >
 
@@ -137,7 +140,4 @@
 
 </body>
 
-</html>
-
-</body>
 </html>
